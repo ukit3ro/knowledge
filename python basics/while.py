@@ -27,4 +27,40 @@ x = 1
 while x != 0:
   x = int(input("Введите целое число: "))
   summ += x
-print(summ)   
+print(summ)
+
+
+#Игра "Угадай число"
+import random
+
+number = random.randint(0, 100)
+print(number)
+max_tries = 4
+tries = 0
+
+while tries < max_tries:
+    guess = int(input('Назови свой вариант'))
+    if guess < number:
+        print('Загаданное число больше')
+    elif guess > number:
+        print('Загаданное число меньше')
+    else:
+        print('Ты угадал!')
+        break
+    tries += 1
+
+if tries >= max_tries:
+    print('Вы проиграли')
+
+#Гипотеза Сиракуз
+n = int(input())
+counter = 0
+while n != 1:
+    counter += 1
+    if counter == 1000:
+        break
+    if n % 2 == 0:
+        n = n / 2
+    else:
+        n = (n * 3 + 1) / 2
+print(n, counter)

@@ -7,7 +7,33 @@ for value in iterator:
     pass
     #блок кода с телом цикла
 
-#for i in range(start, stop, step):
+
+#range() позволяет генерировать ряд чисел в рамках заданного диапазона.
+# с указанием левой и правой границы
+for i in range(10):
+    print(i)
+
+for i in range(3, 20):
+    print(i)
+
+# третий аргумент - шаг
+for i in range(3, 20, 5):
+    print(i)    
+
+
+#enumerate() позволяет получить индекс каждого элемента в объекте
+enumerate('1,2,3,4,5')
+
+for i, el in enumerate('1,2,3,4,5'):  # в цикле можем сразу перебирать индексы и сами элементы
+    print(i, el)
+
+my_list = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+for n_1, n_2, n_3 in my_list:
+    print(n_1, n_2, n_3)
+
+
+
+
 
 # итерация по строкам
 company_name = 'SkillFactory'
@@ -27,3 +53,40 @@ for letter in phrase:
         continue
     print(letter, end='')
 
+
+
+#программa, котрая считает сумму квадратов n натуральных чисел. n запрашиваем у пользователя
+
+n = int(input('Введите число'))
+sum_ = 0
+for num in range(1, n + 1):
+    sum_ += num ** 2
+    print('Сумма на шаге', num, ':', sum_)
+print(sum_)
+
+#программa, которая рассчитаем факториал числа n. n запрашиваем у пользователя
+
+n = int(input('Введите число'))
+for number in range(1, n):
+    n *= number
+print(n)
+
+
+#Вложенные циклы
+
+# Изучаем синтаксис и пытаемся понять логику работы цикла
+for number in range(1, 6):
+    print(f'Это внешний цикл, number = {number}')
+    for i in range(3):
+        print('\t Ха-ха-ха!')
+    print()
+
+# можно и без вложенного цикла
+for i in range(1, 10):  
+    print(str(i) * i)
+
+#Напишем программу, которая выведет на экран таблицу умножения (Таблица Пифагора)
+for i in range(1, 10):  
+    for j in range(1, 10):
+        print(i*j, end='\t')
+    print()

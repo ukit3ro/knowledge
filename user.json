@@ -1,0 +1,12 @@
+[
+  {
+    "login": "admin",
+    "password": "123",
+    "site": "ya.ru"
+  },
+  {
+    "login": "admin",
+    "password": "123",
+    "site": "google.ru"
+  }
+]

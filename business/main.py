@@ -1,25 +1,29 @@
 import json
 from copy import deepcopy
 
+#сохраняет информайию в файл JSON
 def save_data(data):
     with open("data.json", "w") as f:
         json.dump(data, f, indent=2)
 
+#загружает информацию из файла
 def load_data():
     with open("data.json") as f:
         data = json.load(f)
     return data
 
 
+#показывает пропорциональность количества валюты
 def show_percent(name, percent, width=50):
     fill = "▊"
     empty = "-"
     bars = round(percent*width)
     
     progress = fill * bars + empty * (width-bars)
-    print(f'{name:10} - {round(percent*100)}% | {progress}')
+    print(f'{name:10} - {round(percent*100)}% | {progress}|')
     
 
+#рисует пропорциональный график по столбцам с валютами
 def plot_stat(data, signs, height=12):
     
     for i in range(height):
@@ -42,7 +46,8 @@ def plot_stat(data, signs, height=12):
         line += f"{sign:4}"
     print(line)
     
-    
+ 
+#переводит все валюты в единую и показывает соответствующий график   
 def show_convert(data):
     weeks = list(sorted(data.keys()))
     converted = []
@@ -53,7 +58,8 @@ def show_convert(data):
             total += float(curr["cost"]) * float(curr["amount"])
         converted.append(round(total, 2))
     plot_stat(converted, weeks)
-    
+
+#переводит все валюты к единой для конкретной недели и строит график содержания    
 def show_stat(data, weeknum):
     total = 0
     for curr in data[weeknum]:
@@ -67,6 +73,7 @@ def show_stat(data, weeknum):
         show_percent(name, n)
 
 
+#осуществляет навигацию по приложению
 def select_mode():
     print()
     print("-"*30)
@@ -82,6 +89,7 @@ def select_mode():
     print()
     return int(input())
 
+#основная функция, обрабатывающая и собирающая наши рабочие функции в единую программу
 def loop():
     data = load_data()
     

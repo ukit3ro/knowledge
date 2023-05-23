@@ -1,23 +1,25 @@
 import json
-import string
+import string #получение всех символов
 import random
 
+#константы для генерации паролей
 symbols = string.ascii_letters + string.digits + "!_"
 g = 'aiuoe'
 s = "znkjdvgbwlsftqhpmryxc"
 
+#загрузка файла с данными
 def load_db(filename):
     with open(filename) as file:
         db = json.load(file)
     return db
         
-
+#сохранение файла с данными
 def save_db(filename, db):
     with open(filename, 'w') as file:
         json.dump(db, file, indent=2)
         
         
-
+#добавление пароля пользователем вручную
 def add_pass(db):
     site = input(" Введите название сайта: ")
     login = input(" Введите свой логин: ")
@@ -28,7 +30,8 @@ def add_pass(db):
         "password": password,
         "site": site
     })
-    
+
+#основа для изменения элементов пользователем    
 def change(subject, prev):
     t = input(f" Введите {subject} ({prev}): ")
     if t == "":
@@ -36,12 +39,14 @@ def change(subject, prev):
     else:
         return t
 
+#редактирование нужной записи пользователем
 def change_pass(info):
     info["site"] = change("Название сайта", info["site"])
     info["login"] = change("Логин", info["login"])
     info["password"] = change("Пароль", info["password"])
 
 
+#сравнивает строки для генерации паролей
 def compare(s1, s2):
     s1_set = set(s1)
     s2_set = set(s2)
@@ -50,6 +55,7 @@ def compare(s1, s2):
     return len(inter) > 0
 
 
+#генерация сложных паролей
 def gen_pass(L):
     while True:
         res = ""
@@ -68,6 +74,7 @@ def gen_pass(L):
         if all(bools):
             return res
 
+#подфункция для генерации лёгких паролей
 def gen_easy_pass(L):
     res = ""
     for i in range(L-3):
@@ -82,6 +89,7 @@ def gen_easy_pass(L):
     return res
 
 
+#составная функция для генерации нужных паролей
 def add_and_gen(db):
     site = input(" Введите название сайта: ")
     login = input(" Введите свой логин: ")
@@ -99,9 +107,11 @@ def add_and_gen(db):
     })
 
 
+#вывод данных о нужной записи
 def show(info, num):
     print(f"{num:3} | {info['site']} | {info['login']} | {info['password']}")
-    
+
+#поиск записи    
 def search(db):
     site = input(" Введите название сайта: ")
     results = []
@@ -122,6 +132,7 @@ def search(db):
         change_pass(info)
             
 
+#утилита поиска и редактирования записи
 def pass_mode():
     print('Список ваших действий:')
     print('1. Выйти из поиска ')
@@ -129,6 +140,7 @@ def pass_mode():
     print('3. Изменить пароль')
     return int(input('Выберите номер нужного действия: '))
 
+#проверка паролей на надёжность
 def check(db):
     cnt = {}
     for info in db:
@@ -145,6 +157,7 @@ def check(db):
                     print(f"Сайт: {info['site']:15}, Логин: {info['login']:15}")
 
 
+#выбор действия
 def mode():
     print()
     print('-'*30)
@@ -158,7 +171,7 @@ def mode():
     print()
     return int(input('Выберите номер нужного действия: '))
         
-    
+#основная программа 
 def loop(filename):
     db = load_db(filename)
     

@@ -1,22 +1,25 @@
-#Алгоритм работы метода зависит от типа объекта(исходных условий), к которому он применяется
+# Алгоритм работы метода зависит от типа объекта(исходных условий), к которому он применяется
 
 class Payment:
     _balance = 100
-    
+
     def pay(self):
         ...
-        
-class Card_payment(Payment):
+
+
+class CardPayment(Payment):
     def pay(self, price):
         self._balance -= price
         return 'Check' + str(price)
-    
-class Cash_payment(Payment):
+
+
+class CashPayment(Payment):
     def pay(self, price):
         change = self._balance - price
         return 'Check' + str(price), change
-    
-p1 = Card_payment()
+
+
+p1 = CardPayment()
 print(p1.pay(30))
-p2 = Cash_payment()
+p2 = CashPayment()
 print(p2.pay(40))

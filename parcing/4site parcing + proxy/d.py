@@ -1,4 +1,6 @@
 import requests
+
+mport requests
 from bs4 import BeautifulSoup
 import lxml
 from proxy_auth import proxies

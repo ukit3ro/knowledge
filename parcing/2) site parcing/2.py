@@ -34,11 +34,11 @@ for item in all_products_hrefs:
     print(f'{item_text}: {item_href}')
     all_categories_dict[item_text] = item_href
 
-with open('data/all_categories_dict.json', 'w') as file:
+with open('all_categories_dict.json', 'w') as file:
     json.dump(all_categories_dict, file, indent=4, ensure_ascii=False)
 
 
-with open('data/all_categories_dict.json') as file:
+with open('all_categories_dict.json') as file:
      all_categories = json.load(file)
 
 iteration_count = int(len(all_categories)) - 1

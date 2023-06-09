@@ -48,4 +48,3 @@ def get_data(url):
             
 get_data('https://roscarservis.ru/catalog/legkovye/?arCatalogFilter_458_1500340406=Y&set_filter=Y')
 
-a = ''

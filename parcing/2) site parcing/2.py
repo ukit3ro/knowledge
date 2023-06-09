@@ -119,7 +119,7 @@ for category_name, category_href in all_categories.items():
                     carbohydrates
                 ))
 
-        with open(f"data/{count}_{category_name}.json", 'a', encoding='utf-8') as file :
+        with open(f"data/{count}_{category_name}.json", 'a', encoding='utf-8') as file:
             json.dump(product_info, file, indent=4, ensure_ascii=False)
         count += 1
         print(f"# Итерация {count} . {category_name} записан...")

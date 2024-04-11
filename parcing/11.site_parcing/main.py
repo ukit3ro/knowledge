@@ -47,7 +47,7 @@ def get_data_file(url):
             categories_list = soup.find('ul', class_='flex content-center items-center justify-start space-x-2 flex-wrap').find_all('a')
             categories = []
             for item in categories_list:
-                category = item.find_all('span')
+                category = item.find_all('span')    
                 for i in category:
                     catg = i.text
                     categories.append(catg)

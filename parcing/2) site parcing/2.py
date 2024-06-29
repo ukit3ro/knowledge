@@ -18,10 +18,10 @@ headers = {
 req = requests.get(url, headers=headers)
 src = req.text
 
-with open('index.html', 'w') as file:
+with open('index.html', 'w', encoding='UTF-8') as file:
     file.write(src)
 
-with open('index.html') as file:
+with open('index.html', encoding='UTF-8') as file:
     src = file.read()
 
 soup = BeautifulSoup(src, 'lxml')
@@ -34,11 +34,11 @@ for item in all_products_hrefs:
     print(f'{item_text}: {item_href}')
     all_categories_dict[item_text] = item_href
 
-with open('all_categories_dict.json', 'w') as file:
+with open('all_categories_dict.json', 'w', encoding='UTF-8') as file:
     json.dump(all_categories_dict, file, indent=4, ensure_ascii=False)
 
 
-with open('all_categories_dict.json') as file:
+with open('all_categories_dict.json', encoding='UTF-8') as file:
      all_categories = json.load(file)
 
 iteration_count = int(len(all_categories)) - 1
@@ -56,10 +56,10 @@ for category_name, category_href in all_categories.items():
         req = requests.get(url=category_href, headers=headers)
         src = req.text
 
-        with open(f"data/{count}_{category_name}.html", 'w') as file:
+        with open(f"data/{count}_{category_name}.html", 'w', encoding='utf-8') as file:
             file.write(src)
 
-        with open(f"data/{count}_{category_name}.html") as file:
+        with open(f"data/{count}_{category_name}.html", encoding='utf-8') as file:
             src = file.read()
 
         soup = BeautifulSoup(src, 'lxml')

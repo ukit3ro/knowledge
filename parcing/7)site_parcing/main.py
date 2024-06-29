@@ -19,7 +19,7 @@ def get_all_pages():
     if not os.path.exists("data"):
         os.mkdir("data")
 
-    with open("data/page_1.html", "w") as file:
+    with open("data/page_1.html", "w",) as file:
         file.write(r.text)
 
     with open("data/page_1.html") as file:

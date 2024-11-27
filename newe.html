@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пример формы</title>
+    <style>
+        body {
+            background: linear-gradient(to right, rgba(0, 128, 255) 0%, rgba(0, 255, 255) 100%);
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        label {
+            display: inline-block;
+            margin-right: 20px;
+            text-align: left;
+            vertical-align: top;
+            color: #444;
+            line-height: 2;
+        }
+        input, select {
+            width: calc(100% - 40px);
+            padding: 10px;
+            box-sizing: border-box;
+            outline: none;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            font-family: inherit;
+        }
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"%3E%3Cpolygon points="0,0 10,0 5,10" fill="black"/%3E%3C/svg%3E');
+            background-position: right center;
+            background-repeat: no-repeat;
+            background-size: 1em;
+            cursor: pointer;
+        }
+        option {
+            padding: 10px;
+        }
+        button {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 20px;
+            background-color: #444;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #333;
+        }
+    </style>
+</head>
+<body>
+    <form action="#" method="post">
+        <label for="time">Временной отрезок 5 минут (М5), час (H1), 6 часов (H6), 24 часа (H24)</label>
+        <select id="time" name="time">
+            <option value="null">Выберите опцию</option>
+            <option value="5M">5 минут</option>
+            <option value="H1">1 час</option>
+            <option value="H6">6 часов</option>
+            <option value="H24">24 часа</option>
+        </select>
+
+        <label for="order">Порядок сортировки: нисходящий (desc), восходящий (asc)</label>
+        <select id="order" name="order">
+            <option value="desc">Нисходящий</option>
+            <option value="asc">Восходящий</option>
+        </select>
+
+        <label for="minLiqQ">Минимальная ликвидность:</label>
+        <input type="number" id="minLiqQ" name="minLiqQ" min="0" step="any" placeholder="">
+
+        <label for="maxLiqQ">Максимальная ликвидность:</label>
+        <input type="number" id="maxLiqQ" name="maxLiqQ" min="0" step="any" placeholder="">
+
+        <label for="marketCap">Market Cap:</label>
+        <input type="number" id="marketCap" name="marketCap" min="0" step="any" placeholder="">
+
+        <label for="minAge">Минимальный возраст в часах:</label>
+        <input type="number" id="minAge" name="minAge" min="0" step="any" placeholder="">
+
+        <label for="maxAge">Максимальный возраст в часах:</label>
+        <input type="number" id="maxAge" name="maxAge" min="0" step="any" placeholder="">
+
+        <label for="volume">Капитализация токена за 24 часа:</label>
+        <input type="number" id="volume" name="volume" min="0" step="any" placeholder="">
+
+        <button type="submit">Поиск токенов</button>
+    </form>
+</body>
+</html>

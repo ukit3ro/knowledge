@@ -4,30 +4,24 @@ import lxml
 import undetected_chromedriver as uc
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.chrome.service import Service as ChromeService
-from webdriver_manager.chrome import ChromeDriverManager
 import time
 import pyautogui
+import os
 
 
 def choice():
-    print('Поочерёдно введите все необходимые фильтры:')
-    time = input('Временной отрезок 5 минут(M5), час(H1), 6 часов(H6), 24 часа(H24) ')
-    order = input('Порядок сортировки: нисходящий(desc), восходящий(asc) ')
-    minLiq = int(input('Минимальная ликвидность: ' ))
-    maxLiq = int(input('Максимальная ликвидность: ' ))
-    marketCap = int(input('Market Cap: '))
-    minAge = int(input('Минимальный возраст в часах: '))
-    maxAge = int(input('Максимальный возраст в часах: '))
-    volume = int(input('Капитализация токена за 24 часа: '))
-
-    url = f'https://dexscreener.com/solana?rankBy=trendingScore{time}&order={order}&minLiq={minLiq}&maxLiq={maxLiq}&maxMarketCap={marketCap}&minAge={minAge}&maxAge={maxAge}&min24HVol={volume}'
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    data_file_path = os.path.join(base_path, 'data.txt')
+    
+    with open(data_file_path, 'r') as file:
+        content = file.read()
+        
+    perems = content.split('.')
+    url = f'https://dexscreener.com/solana?rankBy=trendingScore{perems[0]}&order={perems[1]}&minLiq={perems[2]}&maxLiq={perems[3]}&maxMarketCap={perems[4]}&minAge={perems[5]}&maxAge={perems[6]}&min24HVol={perems[7]}'
     
     return url
 
-
-def dexscreener_data(url='choice()'):
+def dexscreener_data(url):
     options = webdriver.ChromeOptions()
     # options.experimental_options("useAutomationExtension", False);
     options.add_argument("--disable-blink-features=AutomationControlled");
@@ -35,48 +29,61 @@ def dexscreener_data(url='choice()'):
     #driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
     driver.maximize_window()
     driver.get(url)
-    i = 0
-
     
+    i = 0
     time.sleep(8)
     pyautogui.moveTo(537, 416)
     pyautogui.click()
     time.sleep(8)
-
-    with open(f'/home/yukitero/Документы/GitHub/knowledge/parcing/criptohalture/dexscreener_files/dexinfo_{i}.html', 'w') as file:
+    
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    output_folder = os.path.join(base_path, 'dexscreener_files')
+    
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+    
+    html_file_path = os.path.join(output_folder, f'dexinfo_{i}.html')
+    with open(html_file_path, 'w') as file:
         file.write(driver.page_source)
     
-
     if driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/div[2]/div[5]/div/a'):
-            (driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/div[2]/div[5]/div/a')).click()
-            time.sleep(5)
-            with open(f'/home/yukitero/Документы/GitHub/knowledge/parcing/criptohalture/dexscreener_files/dexinfo_{i+1}.html', 'w') as file:
-                file.write(driver.page_source)
-            i += 1
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/div[2]/div[5]/div/a').click()
+        time.sleep(5)
+        next_html_file_path = os.path.join(output_folder, f'dexinfo_{i + 1}.html')
+        with open(next_html_file_path, 'w') as file:
+            file.write(driver.page_source)
+        i += 1
+    
     while True:
         try:
             if driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/div[2]/div[5]/div/a[2]'):
-                (driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/div[2]/div[5]/div/a[2]')).click()
+                driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/div[2]/div[5]/div/a[2]').click()
                 time.sleep(5)
-                with open(f'/home/yukitero/Документы/GitHub/knowledge/parcing/criptohalture/dexscreener_files/dexinfo_{i+1}.html', 'w') as file:
+                next_html_file_path = os.path.join(output_folder, f'dexinfo_{i + 1}.html')
+                with open(next_html_file_path, 'w') as file:
                     file.write(driver.page_source)
                 i += 1
             else:
                 break
-        except: break
-
-
+        except Exception as e:
+            print(e)
+            break
+    
     driver.close()
     driver.quit()
-
 
 def dexdata_process():
     data  = []
     adresses = []
     cals = []
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    files_dir = os.path.join(base_path, 'dexscreener_files')
+    
     try:
         for i in range(20):
-            with open(f'/home/yukitero/Документы/GitHub/knowledge/parcing/criptohalture/dexscreener_files/dexinfo_{i}.html') as file:
+            file_path = os.path.join(files_dir, f'dexinfo_{i}.html')
+        
+            with open(file_path) as file:
                 src = file.read()
             soup = BeautifulSoup(src, 'lxml')
 
@@ -132,18 +139,25 @@ def solscan_data(adresses):
     driver = uc.Chrome(headless=False,use_subprocess=False)
     driver.maximize_window()
     
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    output_folder = os.path.join(base_path, 'solscans')
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
     for i in adresses:
-        driver.get(url=('https://solscan.io/token/' + i + '#holders'))
+        driver.get(url=f'https://solscan.io/token/{i}#holders')
         if adresses.index(i) == 0:
             time.sleep(8)
             pyautogui.moveTo(537, 416)
         pyautogui.click()
 
         time.sleep(8)
-        
-        with open(f'/home/yukitero/Документы/GitHub/knowledge/parcing/criptohalture/solscans/{i}.html', 'w') as file:
+
+        file_path = os.path.join(output_folder, f'{i}.html')
+        with open(file_path, 'w') as file:
             file.write(driver.page_source)
         print(f'{i} записан')
+        
 
     driver.close()
     driver.quit()
@@ -151,9 +165,16 @@ def solscan_data(adresses):
 
 def solscan_process(adresses, data):
     new_data = []
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    
+    # Формируем универсальный путь к директории с HTML-файлами
+    files_dir = os.path.join(base_path, 'solscans')
+
+        
     for i in adresses:
+        file_path = os.path.join(files_dir, f'{i}.html')
         try:
-            with open(f'/home/yukitero/Документы/GitHub/knowledge/parcing/criptohalture/solscans/{i}.html') as file:
+            with open(file_path) as file:
                 src = file.read()
             soup = BeautifulSoup(src, 'lxml')
             taglist = []
@@ -193,11 +214,14 @@ def solscan_process(adresses, data):
 
 
 
-if __name__ == "__main__":
-    #dexscreener_data()
-    adresses, data = dexdata_process()
-    #solscan_data(adresses)
-    new_data = solscan_process(adresses, data)
-    with open(f"/home/yukitero/Документы/GitHub/knowledge/parcing/criptohalture/data.json", "a") as file:
-       json.dump(new_data, file, indent=4, ensure_ascii=False)
-  
+
+url = choice()
+dexscreener_data(url)
+adresses, data = dexdata_process()
+solscan_data(adresses)
+new_data = solscan_process(adresses, data)
+base_path = os.path.dirname(os.path.abspath(__file__))
+json_file_path = os.path.join(base_path, 'data.json')
+with open(json_file_path, "a") as file:
+    json.dump(new_data, file, indent=4, ensure_ascii=False)
+

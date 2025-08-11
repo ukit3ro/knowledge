@@ -4,3 +4,4 @@ parcing/2) site parcing/data
 parcing/chromedriver
 /parcing/criptohalture/dexscreener_files
 /parcing/criptohalture/solscans
+*.exe

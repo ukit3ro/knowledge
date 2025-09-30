@@ -54,37 +54,29 @@ def parse_reviews_with_selenium():
             driver.get(url)
             time.sleep(2)
             
-            # Словарь для хранения количества отзывов по рейтингам
             ratings = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
             
-            # Парсим данные для каждого рейтинга (1-5 звёзд)
             for stars in range(1, 6):
                 try:
-                    # Находим элемент с нужным рейтингом
                     element = wait.until(EC.presence_of_element_located(
                         (By.CSS_SELECTOR, f'a._9o0Y4g.BdsU1N.base-link input[name="rating"][value="{stars}"]')))
                     parent = element.find_element(By.XPATH, './ancestor::a[1]')
                     
-                    # Извлекаем количество отзывов
                     rating_p = parent.find_element(
                         By.CSS_SELECTOR, 'p._typography_snzga_46._text_snzga_53._v2_snzga_15._-no-margin_snzga_49')
                     count = parse_number(rating_p.text)
                     ratings[stars] = count
                     
-                    # Записываем в соответствующую колонку (I-M)
                     sheet.cell(row=row, column=8 + stars, value=count)
                 except Exception as e:
                     print(f"Строка {row}: Ошибка при парсинге рейтинга {stars} - {str(e)}")
                     sheet.cell(row=row, column=8 + stars, value=0)
 
-            # Получаем значения для каждого рейтинга
             i, j, k, l, m = ratings[1], ratings[2], ratings[3], ratings[4], ratings[5]
             
-            # Вычисляем сумму всех отзывов (H)
             value_h = i + j + k + l + m
-            sheet.cell(row=row, column=8, value=value_h)  # Колонка H
+            sheet.cell(row=row, column=8, value=value_h)
             
-            # Вычисляем значение для колонки G: (i + j*2 + k*3 + l*4 + m*5) / H
             if value_h > 0:
                 value_g = (i + j*2 + k*3 + l*4 + m*5) / value_h
             else:
@@ -94,7 +86,6 @@ def parse_reviews_with_selenium():
             
             print(f"Строка {row}: I={i} J={j} K={k} L={l} M={m} | G={round(value_g, 4)} H={value_h}")
             
-            # Сохраняем после каждой строки
             wb.save('output.xlsx')
             time.sleep(1)
             
@@ -103,7 +94,6 @@ def parse_reviews_with_selenium():
         except Exception as e:
             print(f"Строка {row}: Неожиданная ошибка - {str(e)}")
 
-    # Завершение работы
     try:
         driver.quit()
         wb.save('output.xlsx')
@@ -113,3 +103,4 @@ def parse_reviews_with_selenium():
 
 if __name__ == "__main__":
     parse_reviews_with_selenium()
+    
